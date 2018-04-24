@@ -46,6 +46,5 @@ questions = questions.concat(roles.map(includeQuestionGenerator));
 inquirer.prompt(questions)
 .then(answers => {
 	generator.generate( answers );
+	console.log(answers)
 });
-
-

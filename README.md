@@ -7,7 +7,7 @@ Run
 
     docker run -it --rm -v (pwd):/app -w /app node:9 node index.js
 
-and answer all the questions. 
+and answer all the questions.
 
 **Please note:** If you answer the question for the output with an absoluet path, you need to mount that path a as volume into the docker container! Example:
 
@@ -24,14 +24,14 @@ The generated environment files must be copied over the files from https://githu
 - Merge README here.
 
 ### Milestone 0.1
-- Add additional hooks/generators for the HTTP proxy. 
+- Add additional hooks/generators for the HTTP proxy.
 - Put generation of environment variables in questionnaire
 
 ### Milestone 0.2
 - Add search role
 - Add Browsertest role (chromedriver and mozilla driver services)
 - ESLint for JavaScript files
-- PHP liniting for PHP files
+- PHP ling for PHP files
 
 ### Milestone 0.3
 - Add wikibase role
