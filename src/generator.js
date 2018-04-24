@@ -13,16 +13,14 @@ class EnvironmentGenerator {
     }
 
     generateService (config) {
-        const services = this.availableRoles.get( 'services' );
-        const dockerComposeSetup = services.modifySetup( {} );
-        const dockerCompose = services.modifyServices( {} );
-        const files = new Map();
-        services.modifyFiles( files, dockerCompose, dockerComposeSetup );
+        let { dockerComposeSetup, dockerCompose, files } = this.init(config);
+
         return { dockerComposeSetup, dockerCompose, files };
+
     }
     
     generate( config ) {
-        let { dockerComposeSetup, dockerCompose, files } = this.init();
+        let { dockerComposeSetup, dockerCompose, files } = this.generateService(config);
 
         // TODO: If roles have dependencies, toggle roles that are deactivated but depended on
 
@@ -34,10 +32,12 @@ class EnvironmentGenerator {
                 throw new Error( 'Unknown role:' + role );
             }
 
-            let currentRole = this.availableRoles.get( role );
-            dockerComposeSetup = currentRole.modifySetup( dockerComposeSetup, config.port);
-            dockerCompose = currentRole.modifyServices( dockerCompose, config.port );
-            currentRole.modifyFiles( files, dockerCompose, dockerComposeSetup );
+            if (role !== 'services') {
+                let currentRole = this.availableRoles.get( role );
+                dockerComposeSetup = currentRole.modifySetup( dockerComposeSetup);
+                dockerCompose = currentRole.modifyServices( dockerCompose );
+                currentRole.modifyFiles( files, dockerCompose, dockerComposeSetup );    
+            }
         }
 
         const destinationRoot = config.outputDir || path.dirname( __dirname );
@@ -62,7 +62,13 @@ class EnvironmentGenerator {
 
     }
 
-    init() {
+    init(config) {
+        const services = this.availableRoles.get( 'services' );
+        const dockerComposeSetup = services.modifySetup( {}, config );
+        const dockerCompose = services.modifyServices( {}, config);
+        const files = new Map();
+        services.modifyFiles( files, dockerCompose, dockerComposeSetup );
+        return { dockerComposeSetup, dockerCompose, files };
     }
 
 }

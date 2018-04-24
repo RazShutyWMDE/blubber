@@ -28,14 +28,24 @@ var portQuestion = {
 	default: '8181'
 };
 
+var serviceVersion = {
+	type: 'input',
+	name: 'serviceVersion',
+	message: 'what docker compose version would you need?\n',
+	default: '3'
+};
+
 var generator = Environmentbuilder.build();
 
 questions.push(saveQuestion);
+questions.push(serviceVersion);
 questions.push(portQuestion);
+
 questions = questions.concat(roles.map(includeQuestionGenerator));
 
 inquirer.prompt(questions)
 .then(answers => {
 	generator.generate( answers );
-	console.log( "Generated in " + answers.outputDir );
 });
+
+
