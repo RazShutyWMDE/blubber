@@ -32,12 +32,10 @@ class EnvironmentGenerator {
                 throw new Error( 'Unknown role:' + role );
             }
 
-            if (role !== 'services') {
-                let currentRole = this.availableRoles.get( role );
-                dockerComposeSetup = currentRole.modifySetup( dockerComposeSetup);
-                dockerCompose = currentRole.modifyServices( dockerCompose );
-                currentRole.modifyFiles( files, dockerCompose, dockerComposeSetup );    
-            }
+            let currentRole = this.availableRoles.get( role );
+            dockerComposeSetup = currentRole.modifySetup( dockerComposeSetup);
+            dockerCompose = currentRole.modifyServices( dockerCompose );
+            currentRole.modifyFiles( files, dockerCompose, dockerComposeSetup );
         }
 
         const destinationRoot = config.outputDir || path.dirname( __dirname );
