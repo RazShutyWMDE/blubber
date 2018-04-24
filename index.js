@@ -4,6 +4,7 @@ var Environmentbuilder = require( './src/generatorbuilder' );
 var roles = ['mysql', 'wdqs-frontend', 'wdqs', 'wdqs-proxy', 'wdqs-updater', 'volumes'];
 
 var questions = [];
+var qqq = [];
 
 function includeQuestionGenerator (name) {
 	return {
@@ -43,8 +44,7 @@ questions.push(portQuestion);
 
 questions = questions.concat(roles.map(includeQuestionGenerator));
 
-inquirer.prompt(questions)
-.then(answers => {
+inquirer.prompt(questions).then(answers => {
 	generator.generate( answers );
 	console.log(answers)
 });

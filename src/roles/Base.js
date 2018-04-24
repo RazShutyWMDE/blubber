@@ -3,6 +3,10 @@ const fs   = require( 'fs' );
 const yaml = require( 'js-yaml' );
 
 class AbstractBaseRole {
+    hasPort() {
+        return false;
+    }
+
     modifySetup( dockerComposeSetup ) {
         return dockerComposeSetup;
     }
