@@ -1,0 +1,13 @@
+  mysql:
+    image: mariadb:latest
+    volumes:
+      - mediawiki-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: 'my_wiki'
+      MYSQL_USER: 'wikiuser'
+      MYSQL_PASSWORD: 'sqlpass'
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    networks:
+      default:
+        aliases:
+         - mysql.svc

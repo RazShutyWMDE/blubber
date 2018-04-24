@@ -1,0 +1,10 @@
+  wdqs-updater:
+    image: wikibase/wdqs:0.3.0
+    command: /runUpdate.sh
+    depends_on:
+    - wdqs
+    - wikibase
+    networks:
+      default:
+        aliases:
+         - wdqs-updater.svc

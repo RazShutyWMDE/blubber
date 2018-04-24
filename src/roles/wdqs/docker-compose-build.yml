@@ -1,0 +1,13 @@
+  wdqs:
+    image: wikibase/wdqs:0.3.0
+    restart: always
+    build:
+      context: ./wdqs/0.3.0
+      dockerfile: Dockerfile
+    volumes:
+      - query-service-data:/wdqs/data
+    command: /runBlazegraph.sh
+    networks:
+      default:
+        aliases:
+         - wdqs.svc

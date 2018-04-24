@@ -1,0 +1,9 @@
+  wdqs:
+    image: wikibase/wdqs:0.3.0
+    volumes:
+      - query-service-data:/wdqs/data
+    command: /runBlazegraph.sh
+    networks:
+      default:
+        aliases:
+         - wdqs.svc

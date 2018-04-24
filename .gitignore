@@ -65,4 +65,5 @@ config
 blubber-docker-setup
 /docker-compose.yml
 /docker-compose.setup.yml
+/docker-compose-build.yml
 

@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  wikibase:
+    image: wikibase/wikibase:1.30
+    links:
+      - mysql
+    ports:
+     - "8181:80"
+    volumes:
+      - mediawiki-images-data:/var/www/html/images
+    depends_on:
+    - mysql
+    networks:
+      default:
+        aliases:
+         - wikibase.svc

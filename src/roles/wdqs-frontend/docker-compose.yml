@@ -1,0 +1,10 @@
+  wdqs-frontend:
+    image: wikibase/wdqs-frontend:latest
+    ports:
+     - "8282:80"
+    depends_on:
+    - wdqs-proxy
+    networks:
+      default:
+        aliases:
+         - wdqs-frontend.svc

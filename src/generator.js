@@ -12,6 +12,15 @@ class EnvironmentGenerator {
         this.availableRoles = availableRoles
     }
 
+    generateService (config) {
+        const services = this.availableRoles.get( 'services' );
+        const dockerComposeSetup = services.modifySetup( {} );
+        const dockerCompose = services.modifyServices( {} );
+        const files = new Map();
+        services.modifyFiles( files, dockerCompose, dockerComposeSetup );
+        return { dockerComposeSetup, dockerCompose, files };
+    }
+    
     generate( config ) {
         let { dockerComposeSetup, dockerCompose, files } = this.init();
 
@@ -24,9 +33,10 @@ class EnvironmentGenerator {
             if ( !this.availableRoles.has( role ) ) {
                 throw new Error( 'Unknown role:' + role );
             }
+
             let currentRole = this.availableRoles.get( role );
-            dockerComposeSetup = currentRole.modifySetup( dockerComposeSetup );
-            dockerCompose = currentRole.modifyServices( dockerCompose );
+            dockerComposeSetup = currentRole.modifySetup( dockerComposeSetup, config.port);
+            dockerCompose = currentRole.modifyServices( dockerCompose, config.port );
             currentRole.modifyFiles( files, dockerCompose, dockerComposeSetup );
         }
 
@@ -34,7 +44,7 @@ class EnvironmentGenerator {
 
         mkdirp( destinationRoot, () => {
             fs.writeFileSync(
-                path.join( destinationRoot, 'docker-compose.setup.yml' ),
+                path.join( destinationRoot, 'docker-compose-build.yml' ),
                 yaml.safeDump( dockerComposeSetup )
             );
             fs.writeFileSync(
@@ -53,12 +63,6 @@ class EnvironmentGenerator {
     }
 
     init() {
-        const mediawiki = this.availableRoles.get( 'mediawiki' );
-        const dockerComposeSetup = mediawiki.modifySetup( {} );
-        const dockerCompose = mediawiki.modifyServices( {} );
-        const files = new Map();
-        mediawiki.modifyFiles( files, dockerCompose, dockerComposeSetup );
-        return { dockerComposeSetup, dockerCompose, files };
     }
 
 }

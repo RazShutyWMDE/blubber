@@ -1,16 +1,16 @@
-var inquirer = require('inquirer')
+var inquirer = require('inquirer');
 var Environmentbuilder = require( './src/generatorbuilder' );
 // TODO generate array from roles dir
-var roles = ['phpmyadmin', 'statsd']
+var roles = ['mysql', 'wdqs-frontend', 'wdqs', 'wdqs-proxy', 'wdqs-updater', 'volumes'];
 
-var questions = []
+var questions = [];
 
 function includeQuestionGenerator (name) {
 	return {
 		type: 'confirm',
 		name: 'roles.' + name,
 		message: `Would you like to include ${name}?\n`,
-		default: false,
+		default: true,
 	}
 }
 
@@ -19,15 +19,23 @@ var saveQuestion = {
 	name: 'outputDir',
 	message: 'Where would you like to save the output files?\n',
 	default: './blubber-docker-setup'
-}
+};
+
+var portQuestion = {
+	type: 'input',
+	name: 'dockerPort',
+	message: 'How would you like to expose your port?\n',
+	default: '8181'
+};
 
 var generator = Environmentbuilder.build();
 
-questions.push(saveQuestion)
-questions = questions.concat(roles.map(includeQuestionGenerator))
+questions.push(saveQuestion);
+questions.push(portQuestion);
+questions = questions.concat(roles.map(includeQuestionGenerator));
 
 inquirer.prompt(questions)
 .then(answers => {
 	generator.generate( answers );
 	console.log( "Generated in " + answers.outputDir );
-})
+});

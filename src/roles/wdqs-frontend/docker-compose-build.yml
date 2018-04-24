@@ -1,0 +1,13 @@
+  wdqs-frontend:
+    image: wikibase/wdqs-frontend:latest
+    build:
+      context: ./wdqs-frontend/latest
+      dockerfile: Dockerfile
+    ports:
+     - "8282:80"
+    depends_on:
+    - wdqs-proxy
+    networks:
+      default:
+        aliases:
+         - wdqs-frontend.svc
