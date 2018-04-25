@@ -1,0 +1,10 @@
+{
+    "questions" : [
+        {
+            "type": "input",
+            "name": "imageName",
+            "message": "Which image would you like?\n",
+            "default": "mariadb:latest"
+        }
+    ]
+}
