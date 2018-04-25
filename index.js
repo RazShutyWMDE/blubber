@@ -54,5 +54,3 @@ inquirer.prompt(questions).then(answers => {
 	//generator.generate( answers );
 
 });
-
-

@@ -4,7 +4,7 @@
   "description": "Interactive tool for creating Mediawiki development environment based on Docker",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
