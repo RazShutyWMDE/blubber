@@ -45,7 +45,14 @@ questions.push(portQuestion);
 questions = questions.concat(roles.map(includeQuestionGenerator));
 
 inquirer.prompt(questions).then(answers => {
-	generator.generate( answers );
+
+	roles.forEach(element => {
+		console.log(answers.roles[element]);
+	});
+
+
+	//generator.generate( answers );
+
 });
 
 
