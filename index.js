@@ -2,7 +2,7 @@ var inquirer = require('inquirer');
 var Environmentbuilder = require( './src/generatorbuilder' );
 // TODO generate array from roles dir
 var roles = ['mysql', 'wdqs-frontend', 'wdqs', 'wdqs-proxy', 'wdqs-updater', 'volumes'];
-
+var mysqlQuestions = require( './src/roles/mysql/questions.json' );
 var questions = [];
 var qqq = [];
 
@@ -45,12 +45,15 @@ questions.push(portQuestion);
 questions = questions.concat(roles.map(includeQuestionGenerator));
 
 inquirer.prompt(questions).then(answers => {
-
 	roles.forEach(element => {
-		console.log(answers.roles[element]);
+		if (element === 'mysql' && answers.roles[element]){
+			inquirer.prompt(mysqlQuestions.questions).then(a => {
+				answers[element] = a;
+				generator.generate( answers, element  );
+
+			});
+		}
 	});
 
-
-	//generator.generate( answers );
 
 });

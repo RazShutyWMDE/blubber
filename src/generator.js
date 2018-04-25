@@ -3,6 +3,8 @@ const fs   = require( 'fs' );
 const path = require( 'path' );
 const mkdirp = require( 'mkdirp' );
 
+const files = new Map();
+
 class EnvironmentGenerator {
 
     /**
@@ -12,31 +14,19 @@ class EnvironmentGenerator {
         this.availableRoles = availableRoles
     }
 
-    generateService (config) {
+    generate( config, role, service ) {
         let { dockerComposeSetup, dockerCompose, files } = this.init(config);
-
-        return { dockerComposeSetup, dockerCompose, files };
-
+        let currentRole = this.availableRoles.get( role );
+        dockerComposeSetup = currentRole.modifySetup( dockerComposeSetup, config);
+        dockerCompose = currentRole.modifyServices( dockerCompose, config );
+        currentRole.modifyFiles( files, dockerCompose, dockerComposeSetup );
     }
-    
-    generate( config ) {
-        let { dockerComposeSetup, dockerCompose, files } = this.generateService(config);
 
-        // TODO: If roles have dependencies, toggle roles that are deactivated but depended on
-
-        for ( let role of Object.keys( config.roles ) ) {
-            if ( !config.roles[ role ] ) {
-                continue;
-            }
-            if ( !this.availableRoles.has( role ) ) {
-                throw new Error( 'Unknown role:' + role );
-            }
-
-            let currentRole = this.availableRoles.get( role );
-            dockerComposeSetup = currentRole.modifySetup( dockerComposeSetup);
-            dockerCompose = currentRole.modifyServices( dockerCompose );
-            currentRole.modifyFiles( files, dockerCompose, dockerComposeSetup );
-        }
+    init(config) {
+        const services = this.availableRoles.get( 'services' );
+        const dockerComposeSetup = services.modifySetup( {}, config );
+        const dockerCompose = services.modifyServices( {}, config);
+        services.modifyFiles( files, dockerCompose, dockerComposeSetup );
 
         const destinationRoot = config.outputDir || path.dirname( __dirname );
 
@@ -58,14 +48,6 @@ class EnvironmentGenerator {
             } );
         } )
 
-    }
-
-    init(config) {
-        const services = this.availableRoles.get( 'services' );
-        const dockerComposeSetup = services.modifySetup( {}, config );
-        const dockerCompose = services.modifyServices( {}, config);
-        const files = new Map();
-        services.modifyFiles( files, dockerCompose, dockerComposeSetup );
         return { dockerComposeSetup, dockerCompose, files };
     }
 
